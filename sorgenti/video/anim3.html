@@ -1,0 +1,241 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;width:1080px;height:1920px;background:#000;overflow:hidden} svg{display:block}</style></head>
+<body>
+<svg id="S" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="prism" gradientUnits="userSpaceOnUse" x1="0" y1="300" x2="1080" y2="1620">
+    <stop offset="0" stop-color="#FF4F31"/><stop offset=".2" stop-color="#FFD23F"/><stop offset=".4" stop-color="#3DDC97"/>
+    <stop offset=".6" stop-color="#2EC4FF"/><stop offset=".8" stop-color="#7B61FF"/><stop offset="1" stop-color="#FF5FA2"/>
+  </linearGradient>
+  <filter id="goo" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feGaussianBlur id="gooBlur" in="SourceGraphic" stdDeviation="14" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -12"/>
+  </filter>
+  <filter id="edgeF" x="-10%" y="-10%" width="120%" height="120%">
+    <feMorphology in="SourceAlpha" operator="erode" radius="2.2" result="e"/>
+    <feComposite in="SourceGraphic" in2="e" operator="out"/>
+  </filter>
+  <filter id="bev" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
+    <feSpecularLighting in="b" surfaceScale="7" specularConstant="1.3" specularExponent="26" lighting-color="#fff" result="s">
+      <feDistantLight azimuth="235" elevation="34"/></feSpecularLighting>
+    <feComposite in="s" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <linearGradient id="brandG" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1080" y2="1920">
+    <stop offset="0" stop-color="#FB4F31"/><stop offset=".28" stop-color="#D98C99"/><stop offset=".5" stop-color="#FDF6E2"/>
+    <stop offset=".74" stop-color="#3FA9BA"/><stop offset="1" stop-color="#1C8FA3"/></linearGradient>
+  <filter id="neonGlow" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="g1"/><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="g2"/>
+    <feMerge><feMergeNode in="g1"/><feMergeNode in="g1"/><feMergeNode in="g2"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
+
+  <!-- finestra: gocce + fiamme. Dentro si vede la Trama Vetro -->
+  <g id="win">
+    <rect id="full" x="-80" y="-80" width="1240" height="2080" fill="#fff"/>
+    <g id="flWin"></g>
+  </g>
+  <mask id="winM" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920"><use href="#win"/></mask>
+  <mask id="edgeM" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920"><g filter="url(#edgeF)"><use href="#win"/></g></mask>
+  <clipPath id="flc" clipPathUnits="userSpaceOnUse"><path id="flcP"/></clipPath>
+  <clipPath id="wmClip" clipPathUnits="userSpaceOnUse"><rect x="-200" y="-140" width="3200" height="880"/></clipPath>
+  <clipPath id="cardLogoClip" clipPathUnits="userSpaceOnUse"><rect x="-300" y="-140" width="7000" height="1220"/></clipPath>
+</defs>
+
+<rect width="1080" height="1920" fill="#000"/>
+<g id="stage">
+  <!-- trama dentro la finestra -->
+  <g mask="url(#winM)"><g id="tramaG">
+    <image id="trama" href="trama.jpg" x="0" y="0" width="1080" height="1920" preserveAspectRatio="xMidYMid slice"/>
+    <g id="neon" filter="url(#neonGlow)" style="mix-blend-mode:screen"></g>
+    <g id="sparks" filter="url(#neonGlow)"></g>
+  </g></g>
+  <!-- vetro: bordo prismatico + rilievo -->
+  <g id="glass">
+    <g id="bevG" filter="url(#bev)" style="mix-blend-mode:screen"><use href="#win"/></g>
+    <g filter="url(#soft)" opacity=".55"><rect width="1080" height="1920" fill="url(#prism)" mask="url(#edgeM)"/></g>
+    <rect id="rim" width="1080" height="1920" fill="url(#prism)" mask="url(#edgeM)" style="mix-blend-mode:screen"/>
+  </g>
+  <!-- riempimento panna delle fiamme -->
+  <g id="cream"></g>
+  <!-- logotipo -->
+  <g id="wm" clip-path="url(#wmClip)"></g>
+  <rect id="dim0" width="1080" height="1920" fill="#000" opacity="0"/>
+</g>
+<g id="cards"></g>
+<g id="claim"></g>
+</svg>
+<script src="flubber.min.js"></script>
+<script>
+const D = JSON.parse(DATA_JSON);
+const NS='http://www.w3.org/2000/svg', W=1080, H=1920, CX=540, CY=960;
+const $=id=>document.getElementById(id);
+const el=(tag,attrs={},parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;};
+// ---------- easing
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const mix=(a,b,x)=>a+(b-a)*x;
+const expoOut=x=>x>=1?1:1-Math.pow(2,-10*x);
+const expoIn=x=>x<=0?0:Math.pow(2,10*x-10);
+const expoInOut=x=>x<=0?0:x>=1?1:x<.5?Math.pow(2,20*x-10)/2:(2-Math.pow(2,-20*x+10))/2;
+const quintInOut=x=>x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2;
+const backOut=x=>{const c1=1.35,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+const sine=x=>-(Math.cos(Math.PI*x)-1)/2;
+
+// ---------- lettere: divide un path in gruppi (lettera + contro-forme)
+function splitLetters(d){
+  const subs=d.match(/M[^M]*/g); const tmp=el('path',{},$('S'));
+  const items=subs.map(s=>{tmp.setAttribute('d',s);const b=tmp.getBBox();return {d:s,b};});
+  tmp.remove();
+  const groups=[];
+  items.sort((a,b)=>(b.b.width*b.b.height)-(a.b.width*a.b.height));
+  for(const it of items){
+    const host=groups.find(g=>it.b.x>=g.b.x-1&&it.b.y>=g.b.y-1&&it.b.x+it.b.width<=g.b.x+g.b.width+1&&it.b.y+it.b.height<=g.b.y+g.b.height+1);
+    if(host) host.d+=' '+it.d; else groups.push({d:it.d,b:it.b});
+  }
+  return groups.sort((a,b)=>a.b.x-b.b.x);
+}
+// ---------- fiamme
+const FL=D.flame; $('flcP').setAttribute('d',FL);
+const flWin=[], flCream=[], wave=[];
+for(let i=0;i<3;i++){
+  flWin.push(el('path',{d:FL,fill:'#fff'},$('flWin')));
+  const g=el('g',{},$('cream')); const c=el('g',{'clip-path':'url(#flc)'},g);
+  wave.push(el('path',{fill:'#FDF6E2'},c)); flCream.push(g);
+}
+// layout fiamme
+const S1=760/1840;                               // simbolo grande al centro
+const S2=820/4790, LX=CX-4790*S2/2;              // logo orizzontale
+const S3=0.235;                                  // chiusura
+function layoutSym(s,cy){ const w=1840*s; return [0,1,2].map(i=>({x:CX-w/2+i*680*s,y:cy-350*s,s})); }
+function layoutLogo(){ return [0,1,2].map(i=>({x:LX+i*680*S2,y:CY-350*S2,s:S2})); }
+function zoom(L,Z){ return L.map(f=>({x:CX+(f.x-CX)*Z,y:CY+(f.y-CY)*Z,s:f.s*Z})); }
+function lerpL(A,B,x){ return A.map((a,i)=>({x:mix(a.x,B[i].x,x),y:mix(a.y,B[i].y,x),s:mix(a.s,B[i].s,x)})); }
+// ---------- logotipo a lettere
+const WMG=splitLetters(D.wm);
+const wmRoot=$('wm'); wmRoot.setAttribute('transform',`translate(${LX+2040*S2} ${CY-350*S2}) scale(${S2})`);
+const wmL=WMG.map(g=>el('path',{d:g.d,fill:'#FDF6E2','fill-rule':'evenodd'},wmRoot));
+// ---------- card dei sotto-brand
+const CARDS=[['3blaze_academy','#FB4F31','#000000'],['3blaze_net','#006172','#FDF6E2'],['luisa','#4D1821','#FDF6E2']];
+const cardEls=CARDS.map(([k,bg,ink])=>{
+  const L=D[k], [vx,vy,vw,vh]=L.vb, s=k==='3blaze_academy'?0.142:0.171;
+  const g=el('g',{},$('cards'));
+  const r=el('rect',{x:0,y:0,width:W,height:H,fill:bg},g);
+  const lg=el('g',{transform:`translate(${CX-(vx+vw/2)*s} ${CY-350*s}) scale(${s})`},g);
+  const clip=el('g',{'clip-path':'url(#cardLogoClip)'},lg);
+  const letters=splitLetters(L.d).map(gr=>el('path',{d:gr.d,fill:ink,'fill-rule':'evenodd'},clip));
+  const dim=el('rect',{width:W,height:H,fill:'#000',opacity:0},g);
+  return {g,r,letters,dim};
+});
+// ---------- claim
+const CL=D.claim, [cvx,cvy,cvw,cvh]=CL.vb, CS=330/cvw;
+const clRoot=el('g',{},$('claim'));
+const clClipR=el('clipPath',{id:'clc',clipPathUnits:'userSpaceOnUse'},$('S').querySelector('defs'));
+el('rect',{x:cvx-100,y:-140,width:cvw+300,height:1250},clClipR);
+const clIn=el('g',{'clip-path':'url(#clc)'},clRoot);
+const clL=splitLetters(CL.d).map(g=>el('path',{d:g.d,fill:'#FDF6E2','fill-rule':'evenodd'},clIn));
+const SYM_END_Y=CY-70;
+clRoot.setAttribute('transform',`translate(${CX-(cvx+cvw/2)*CS} ${SYM_END_Y+350*S3+70}) scale(${CS})`);
+
+// ---------- neon: i contorni della trama si accendono partendo dall'inizio di una lettera
+const NEON=NEON_JSON; const T0=0.95, SPEED=780;
+NEON.forEach((n,k)=>{
+  n.core=el('path',{d:n.d,fill:'none',stroke:'url(#brandG)','stroke-width':4.2,'stroke-linecap':'round','stroke-linejoin':'round'},$('neon'));
+  n.hot=el('path',{d:n.d,fill:'none',stroke:'#fff','stroke-width':1.6,'stroke-linecap':'round',opacity:.8},$('neon'));
+  n.len=n.core.getTotalLength();
+  n.t0 = k===0 ? T0 : T0+0.35+n.dist/SPEED;
+  n.dur = Math.min(2.1,Math.max(1.0,n.len/1500));
+  [n.core,n.hot].forEach(p=>{p.setAttribute('stroke-dasharray',n.len+' '+(n.len+10));});
+  n.spark=el('circle',{r:5,fill:'#fff'},$('sparks'));
+});
+const DOT=el('circle',{cx:NEON[0].sx,cy:NEON[0].sy,r:0,fill:'#FDF6E2'},$('sparks'));
+function renderNeon(t){
+  const show=t<5.2; $('neon').style.display=show?'':'none'; $('sparks').style.display=show?'':'none'; if(!show)return;
+  // punto di luce iniziale: l'inizio della prima lettera
+  const dIn=backOut(seg(t,0.35,0.85)), pulse=1+0.25*Math.sin(Math.max(0,t-0.85)*14)*(1-seg(t,0.85,1.15));
+  DOT.setAttribute('r',7*dIn*pulse*(1-seg(t,1.1,1.5))); DOT.setAttribute('opacity',1-seg(t,1.2,1.5));
+  const fade=1-sine(seg(t,3.6,5.0));               // il neon lascia il posto al vetro
+  const w=mix(4.2,1.4,sine(seg(t,3.2,4.6)));
+  NEON.forEach((n,k)=>{
+    const x=seg(t,n.t0,n.t0+n.dur), p=k===0?sine(x):1-Math.pow(1-x,2.2);
+    const off=n.len*(1-p);
+    n.core.setAttribute('stroke-dashoffset',off); n.hot.setAttribute('stroke-dashoffset',off);
+    // accensione del neon: breve sfarfallio quando il tratto si chiude
+    const e=t-(n.t0+n.dur); let fl=1; if(e>0&&e<0.22){ fl = (Math.sin(e*95+k*1.7)>-0.2)?1:0.35; }
+    const vis = p>0 ? 1 : 0;
+    n.core.setAttribute('opacity',vis*fl*fade); n.hot.setAttribute('opacity',vis*fl*fade*0.8);
+    n.core.setAttribute('stroke-width',w);
+    // testina luminosa che disegna
+    if(p>0&&p<1){ const pt=n.core.getPointAtLength(n.len*p); n.spark.setAttribute('cx',pt.x); n.spark.setAttribute('cy',pt.y); n.spark.setAttribute('opacity',1); n.spark.setAttribute('r',k===0?6:4.5); }
+    else n.spark.setAttribute('opacity',0);
+  });
+}
+function wavePath(level,amp,ph){
+  let d=`M-60 ${level}`; for(let x=-60;x<=540;x+=15){ d+=` L${x} ${level+amp*Math.sin(x/480*Math.PI*2*1.2+ph)}`; } return d+' L540 900 L-60 900 Z';
+}
+function setFlames(L){ L.forEach((f,i)=>{const tr=`translate(${f.x} ${f.y}) scale(${f.s})`; flWin[i].setAttribute('transform',tr); flCream[i].setAttribute('transform',tr);}); }
+function letters(arr,t0,stagger,dur,dir,amp){ // dir 1 = entra dal basso, -1 = esce in basso
+  arr.forEach((p,j)=>{ const x=seg(window.__t,t0+j*stagger,t0+j*stagger+dur);
+    const v = dir>0 ? (1-expoOut(x)) : expoIn(x);
+    p.setAttribute('transform',`translate(0 ${v*amp})`); });
+}
+
+window.renderAt=function(t){
+  window.__t=t;
+  // ---------- 1 · gocce che compongono la trama
+  $('full').style.display = t<5.0 ? '' : 'none';
+  renderNeon(t);
+  // ---------- trama: entra, si muove, si ritira
+  let ts = mix(1.06,1.0,sine(seg(t,0.4,4.0)));
+  ts *= mix(1,1.07,sine(seg(t,3.6,5.4)));
+  ts *= mix(1,0.88,expoInOut(seg(t,5.0,6.5)));
+  const rot = 0 + mix(0,-4,sine(seg(t,3.6,5.4))) + mix(0,6,expoInOut(seg(t,5.0,6.5)));
+  const ty = mix(0,-60,sine(seg(t,3.0,6.8)));
+  $('trama').setAttribute('opacity', expoInOut(seg(t,2.9,4.3)));
+  $('tramaG').setAttribute('transform',`translate(${CX} ${CY+ty}) rotate(${rot}) scale(${ts}) translate(${-CX} ${-CY})`);
+  // ---------- 2 · la trama si condensa nelle tre fiamme
+  const SYM=layoutSym(S1,CY), LOGO=layoutLogo(), END=layoutSym(S3,SYM_END_Y);
+  let L;
+  if(t<5.0){ L=zoom(SYM,40); $('flWin').style.display='none'; }
+  else { $('flWin').style.display='';
+    if(t<6.5) L=zoom(SYM, Math.exp(mix(Math.log(30),0,expoInOut(seg(t,5.0,6.5)))));
+    else if(t<7.75) L=SYM;
+    else if(t<15.2) L=lerpL(SYM,LOGO,expoInOut(seg(t,7.75,8.75)));
+    else L=lerpL(LOGO,END,expoInOut(seg(t,15.2,16.3)));
+  }
+  // respiro leggerissimo sulle fiamme di vetro
+  if(t>=6.5&&t<7.75){ const b=1+0.01*Math.sin((t-6.5)*3); L=L.map(f=>({x:CX+(f.x-CX)*b,y:CY+(f.y-CY)*b,s:f.s*b})); }
+  setFlames(L);
+  // vetro visibile finché la panna non riempie
+  const gOp = 1-expoInOut(seg(t,7.35,7.9));
+  $('glass').setAttribute('opacity', t<5.0?0:gOp);
+  $('win').style.display = t<7.95 ? '' : 'none';
+  // ---------- 3 · le fiamme diventano panna (riempimento liquido dal basso)
+  for(let i=0;i<3;i++){ const x=expoInOut(seg(t,7.0+i*0.08,7.62+i*0.08));
+    const level=mix(820,-120,x), amp=34*Math.sin(Math.PI*x);
+    wave[i].setAttribute('d',wavePath(level,amp,t*7+i)); }
+  // ---------- 4 · 3blaze entra lettera per lettera
+  if(t<14.9) letters(wmL,8.2,0.05,0.75,1,860); else letters(wmL.slice().reverse(),14.95,0.035,0.42,-1,860);
+  // ---------- 5 · sotto-brand: card che salgono (stile foglio iOS)
+  const exitP = expoInOut(seg(t,13.95,14.75));
+  const rise = [0,1,2].map(k=>expoOut(seg(t,9.75+1.38*k,9.75+1.38*k+0.85)));
+  const back = j => rise[j]*(1-exitP);       // quanto il livello j viene spinto indietro
+  const pushB=(g,p)=>g.setAttribute('transform',`translate(${CX} ${CY}) scale(${1-0.07*p}) translate(${-CX} ${-CY})`);
+  pushB($('stage'),back(0)); $('dim0').setAttribute('opacity',0.55*back(0));
+  cardEls.forEach((c,k)=>{
+    const y = H*(1-rise[k]) + H*1.05*exitP;
+    const p = k<2 ? back(k+1) : 0; const sc=1-0.07*p;
+    c.g.setAttribute('transform',`translate(0 ${y}) translate(${CX} ${CY}) scale(${sc}) translate(${-CX} ${-CY})`);
+    c.r.setAttribute('rx', 64*(1-rise[k]) + 64*p); c.dim.setAttribute('opacity',0.55*p);
+    c.g.style.display = (rise[k]>0 && exitP<1) ? '' : 'none';
+    c.letters.forEach((l,j)=>{ const x=seg(t,9.95+1.38*k+j*0.04,9.95+1.38*k+j*0.04+0.75); l.setAttribute('transform',`translate(0 ${(1-expoOut(x))*1100})`); });
+  });
+  // ---------- 6 · chiusura: fiamme al centro, poi il claim
+  letters(clL,17.0,0.022,0.8,1,1150);
+  $('claim').style.display = t>=16.9 ? '' : 'none';
+  // nero finale
+  document.body.style.opacity = 1 - seg(t,20.6,21.0);
+};
+window.renderAt(0);
+</script>
+</body></html>

@@ -1,0 +1,270 @@
+{
+ "$description": "3blaze 2027 design tokens (formato W3C DTCG) per Figma Tokens / Style Dictionary.",
+ "color": {
+  "ground": {
+   "$type": "color",
+   "$value": "#000000",
+   "$description": "Fondo pagina. Nero è il fondo del gruppo; Crema è il fondo editoriale e della carta.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#000000",
+     "light": "#FDF6E2"
+    }
+   }
+  },
+  "surface-1": {
+   "$type": "color",
+   "$value": "#0E0E0E",
+   "$description": "Prima superficie su ground: sezioni, pannelli opachi.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#0E0E0E",
+     "light": "#F6EDD3"
+    }
+   }
+  },
+  "surface-2": {
+   "$type": "color",
+   "$value": "#1A1A1A",
+   "$description": "Seconda superficie: card opache, campi di input.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#1A1A1A",
+     "light": "#EDE3C6"
+    }
+   }
+  },
+  "ink": {
+   "$type": "color",
+   "$value": "#FDF6E2",
+   "$description": "Testo e logo su ground/surface. 19,5:1.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#FDF6E2",
+     "light": "#000000"
+    }
+   }
+  },
+  "ink-muted": {
+   "$type": "color",
+   "$value": "#A8A294",
+   "$description": "Testo secondario, didascalie. ≥5,3:1 su ground in entrambi i temi.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#A8A294",
+     "light": "#6B665C"
+    }
+   }
+  },
+  "hairline": {
+   "$type": "color",
+   "$value": "#FDF6E224",
+   "$description": "Filetti 1px tra righe tipografiche e sezioni.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#FDF6E224",
+     "light": "#0000001F"
+    }
+   }
+  },
+  "brand-nero": {
+   "$type": "color",
+   "$value": "#000000",
+   "$description": "Colore istituzionale del gruppo 3blaze (media / holding)."
+  },
+  "brand-crema": {
+   "$type": "color",
+   "$value": "#FDF6E2",
+   "$description": "Crema 3blaze: il 'bianco' del brand. Mai #FFFFFF per fondi o logo."
+  },
+  "academy": {
+   "$type": "color",
+   "$value": "#FB4F31",
+   "$description": "Brace — 3blaze academy. Fondi, logo, numeri grandi. Testo crema su Brace solo ≥24px (3,1:1); per testo piccolo usare nero (6,3:1)."
+  },
+  "academy-ink": {
+   "$type": "color",
+   "$value": "#FB4F31",
+   "$description": "Brace come TESTO: su crema serve la versione profonda (4,7:1); su nero va bene la Brace piena (6,3:1).",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#FB4F31",
+     "light": "#C93A20"
+    }
+   }
+  },
+  "news": {
+   "$type": "color",
+   "$value": "#006172",
+   "$description": "Petrolio — 3blaze .net (news). Fondi e logo. Crema su Petrolio 6,6:1."
+  },
+  "news-ink": {
+   "$type": "color",
+   "$value": "#3FA9BA",
+   "$description": "Petrolio come TESTO: su nero serve la versione chiara (7,6:1).",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#3FA9BA",
+     "light": "#006172"
+    }
+   }
+  },
+  "ia": {
+   "$type": "color",
+   "$value": "#4D1821",
+   "$description": "Vinaccia — luisa (IA). Fondi e logo. Crema su Vinaccia 13,3:1."
+  },
+  "ia-ink": {
+   "$type": "color",
+   "$value": "#D98C99",
+   "$description": "Vinaccia come TESTO: su nero serve la versione chiara (8,2:1).",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#D98C99",
+     "light": "#4D1821"
+    }
+   }
+  },
+  "accent": {
+   "$type": "color",
+   "$value": "{academy}",
+   "$description": "Accento del gruppo: la Brace. Una sola cosa per schermata (CTA, numero chiave).",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "{academy}",
+     "light": "{academy-ink}"
+    }
+   }
+  },
+  "focus": {
+   "$type": "color",
+   "$value": "#2EC4FF",
+   "$description": "Anello di focus da tastiera (2px + 2px di offset). Mai decorativo."
+  },
+  "prism-1": {
+   "$type": "color",
+   "$value": "#FF4F31",
+   "$description": "Prisma — solo bordo arcobaleno del liquid glass. Rosso."
+  },
+  "prism-2": {
+   "$type": "color",
+   "$value": "#FFD23F",
+   "$description": "Prisma — giallo."
+  },
+  "prism-3": {
+   "$type": "color",
+   "$value": "#3DDC97",
+   "$description": "Prisma — verde."
+  },
+  "prism-4": {
+   "$type": "color",
+   "$value": "#2EC4FF",
+   "$description": "Prisma — ciano."
+  },
+  "prism-5": {
+   "$type": "color",
+   "$value": "#7B61FF",
+   "$description": "Prisma — viola."
+  },
+  "prism-6": {
+   "$type": "color",
+   "$value": "#FF5FA2",
+   "$description": "Prisma — magenta. I sei Prisma esistono solo come rifrazione: mai fondi, mai testo."
+  },
+  "glass-tint": {
+   "$type": "color",
+   "$value": "#FDF6E20A",
+   "$description": "Velo del pannello liquid glass sopra la rifrazione.",
+   "$extensions": {
+    "3blaze.themes": {
+     "dark": "#FDF6E20A",
+     "light": "#FFFFFF33"
+    }
+   }
+  }
+ },
+ "space": {
+  "space-1": {
+   "$type": "dimension",
+   "$value": "4px",
+   "$description": "Spazio minimo: icona ↔ testo."
+  },
+  "space-2": {
+   "$type": "dimension",
+   "$value": "8px",
+   "$description": "Gap interno di chip e bottoni piccoli."
+  },
+  "space-3": {
+   "$type": "dimension",
+   "$value": "12px",
+   "$description": "Padding verticale bottoni."
+  },
+  "space-4": {
+   "$type": "dimension",
+   "$value": "16px",
+   "$description": "Padding card piccola, gap di form."
+  },
+  "space-6": {
+   "$type": "dimension",
+   "$value": "24px",
+   "$description": "Padding card, gutter griglia mobile."
+  },
+  "space-8": {
+   "$type": "dimension",
+   "$value": "32px",
+   "$description": "Gutter griglia desktop."
+  },
+  "space-12": {
+   "$type": "dimension",
+   "$value": "48px",
+   "$description": "Distanza tra blocchi in sezione."
+  },
+  "space-16": {
+   "$type": "dimension",
+   "$value": "64px",
+   "$description": "Margine di sezione mobile."
+  },
+  "space-24": {
+   "$type": "dimension",
+   "$value": "96px",
+   "$description": "Margine di sezione desktop."
+  },
+  "space-32": {
+   "$type": "dimension",
+   "$value": "128px",
+   "$description": "Respiro di apertura (hero)."
+  }
+ },
+ "radius": {
+  "radius-xs": {
+   "$type": "dimension",
+   "$value": "6px",
+   "$description": "Chip, tag, input piccoli."
+  },
+  "radius-sm": {
+   "$type": "dimension",
+   "$value": "12px",
+   "$description": "Input, bottoni secondari."
+  },
+  "radius-md": {
+   "$type": "dimension",
+   "$value": "20px",
+   "$description": "Card opache."
+  },
+  "radius-lg": {
+   "$type": "dimension",
+   "$value": "32px",
+   "$description": "Pannelli liquid glass (default)."
+  },
+  "radius-xl": {
+   "$type": "dimension",
+   "$value": "48px",
+   "$description": "Glass hero e media grandi."
+  },
+  "radius-pill": {
+   "$type": "dimension",
+   "$value": "999px",
+   "$description": "Bottoni primari, toggle: l'arco della fiamma."
+  }
+ }
+}

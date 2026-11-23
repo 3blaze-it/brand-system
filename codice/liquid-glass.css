@@ -1,0 +1,50 @@
+/* 3blaze Liquid Glass — strato CSS (rim iridescente, ombra, fallback). Abbinare a liquid-glass.js */
+.lg {
+  --lg-rim: 1.5px;
+  --lg-tint: rgba(253, 246, 226, 0.04);
+  position: relative;
+  isolation: isolate;
+  background: var(--lg-tint);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,.22) inset,
+    0 -1px 0 0 rgba(0,0,0,.25) inset,
+    0 24px 60px -18px rgba(0,0,0,.55),
+    0 2px 6px rgba(0,0,0,.25);
+}
+/* Bordo arcobaleno: gradiente conico mascherato sul solo perimetro, più intenso agli angoli */
+.lg::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: var(--lg-rim);
+  background:
+    conic-gradient(from 210deg,
+      #ff4f31 0deg, #ffd23f 40deg, #3ddc97 80deg, #2ec4ff 120deg, #7b61ff 160deg,
+      #ff5fa2 200deg, #ff4f31 240deg, #ffd23f 280deg, #3ddc97 320deg, #ff4f31 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: .55;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+/* Luce speculare morbida in alto */
+.lg::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 60% at 30% -10%, rgba(255,255,255,.18), transparent 55%);
+  pointer-events: none;
+}
+/* Fallback (Safari/Firefox): vetro sfocato. Dichiarato: NON è la versione di riferimento. */
+.lg--fallback {
+  background: rgba(253, 246, 226, 0.10);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7);
+  backdrop-filter: blur(18px) saturate(1.7);
+}
+.lg--fallback::before { opacity: .8; }
+@media (prefers-reduced-transparency: reduce) {
+  .lg, .lg--fallback { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #1a1a1a; }
+}
+/* Forme libere (fiamma): il bordo arcobaleno nasce solo dalla dispersione reale */
+.lg--shape { background: transparent; box-shadow: none; }
+.lg--shape::before, .lg--shape::after { display: none; }

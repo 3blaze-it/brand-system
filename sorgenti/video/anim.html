@@ -1,0 +1,198 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+html,body{margin:0;width:1080px;height:1920px;background:#000;overflow:hidden}
+svg{display:block}
+</style></head>
+<body>
+<svg id="S" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="prism" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FF4F31"/><stop offset=".2" stop-color="#FFD23F"/><stop offset=".4" stop-color="#3DDC97"/>
+    <stop offset=".6" stop-color="#2EC4FF"/><stop offset=".8" stop-color="#7B61FF"/><stop offset="1" stop-color="#FF5FA2"/>
+  </linearGradient>
+  <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+    <stop offset="1" stop-color="#fff" stop-opacity=".05"/>
+  </linearGradient>
+  <linearGradient id="sweepG" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <clipPath id="cp"><path id="cpPath"/></clipPath>
+  <filter id="bev" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="b"/>
+    <feSpecularLighting in="b" surfaceScale="8" specularConstant="1.4" specularExponent="26" lighting-color="#ffffff" result="s">
+      <feDistantLight azimuth="235" elevation="34"/></feSpecularLighting>
+    <feComposite in="s" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <filter id="bev2" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+    <feSpecularLighting in="b" surfaceScale="4" specularConstant=".7" specularExponent="40" lighting-color="#ffffff" result="s">
+      <feDistantLight azimuth="55" elevation="30"/></feSpecularLighting>
+    <feComposite in="s" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter>
+  <filter id="disp" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs>
+
+<!-- fondo -->
+<g id="bgc">
+  <rect width="1080" height="1920" fill="#000"/>
+  <image id="trama" href="trama.jpg" x="0" y="0" width="1080" height="1920" preserveAspectRatio="xMidYMid slice"/>
+  <rect id="solid" width="1080" height="1920" fill="#FB4F31" opacity="0"/>
+</g>
+
+<!-- forma del vetro (una sola, "liquida": le forme vicine si fondono) -->
+<defs>
+  <filter id="goo" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+    <feGaussianBlur id="gooBlur" in="SourceGraphic" stdDeviation="0.01" result="b"/>
+    <feColorMatrix id="gooM" in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="edgeF" x="-10%" y="-10%" width="120%" height="120%">
+    <feMorphology in="SourceAlpha" operator="erode" radius="1.8" result="e"/>
+    <feComposite in="SourceGraphic" in2="e" operator="out"/>
+  </filter>
+  <filter id="shadowF" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="b"/><feFlood flood-color="#000"/><feComposite in2="b" operator="in"/>
+  </filter>
+  <g id="gooG" filter="url(#goo)"><path id="gp" fill="#fff"/></g>
+  <mask id="gm" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920"><use href="#gooG"/></mask>
+  <mask id="em" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920"><g filter="url(#edgeF)"><use href="#gooG"/></g></mask>
+  <linearGradient id="prismU" gradientUnits="userSpaceOnUse" x1="120" y1="760" x2="960" y2="1160">
+    <stop offset="0" stop-color="#FF4F31"/><stop offset=".2" stop-color="#FFD23F"/><stop offset=".4" stop-color="#3DDC97"/>
+    <stop offset=".6" stop-color="#2EC4FF"/><stop offset=".8" stop-color="#7B61FF"/><stop offset="1" stop-color="#FF5FA2"/>
+  </linearGradient>
+</defs>
+<g id="shadowG" filter="url(#shadowF)"><use href="#gooG" transform="translate(0 26)"/></g>
+<g mask="url(#gm)">
+  <g filter="url(#disp)"><use id="lens" href="#bgc"/></g>
+  <rect id="tint" width="1080" height="1920" fill="#000" opacity=".22"/>
+  <rect width="1080" height="1920" fill="url(#sheen)" id="sheenR"/>
+  <rect id="sweep" x="-400" y="0" width="260" height="1920" fill="url(#sweepG)" transform="skewX(-20)" opacity="0"/>
+  <g filter="url(#soft)"><rect id="innerGlow" width="1080" height="1920" fill="url(#prismU)" mask="url(#em)" opacity=".5" transform="scale(1)"/></g>
+</g>
+<g id="bevG" filter="url(#bev)" style="mix-blend-mode:screen"><use href="#gooG"/></g>
+<g id="bevG2" filter="url(#bev2)" style="mix-blend-mode:screen" opacity=".7"><use href="#gooG"/></g>
+<rect id="rim" width="1080" height="1920" fill="url(#prismU)" mask="url(#em)" opacity=".9" style="mix-blend-mode:screen"/>
+
+<!-- marchio -->
+<g id="logos"></g>
+<g id="claim"></g>
+</svg>
+<script src="flubber.min.js"></script>
+<script>
+const D = JSON.parse(DATA_JSON);
+const W=1080, H=1920, CX=540, CY=960;
+const $ = id => document.getElementById(id);
+// --- forme
+const FL = D.flame; // 480 x 700
+function flamePath(x, y, s){ // trasla/scala il path della fiamma
+  return FL.replace(/([MLA])\s*([^MLAZ]+)/g,(m,c,args)=>{
+    const n=args.trim().split(/[\s,]+/).map(Number);
+    if(c==='A'){ return `A${n[0]*s} ${n[1]*s} ${n[2]} ${n[3]} ${n[4]} ${x+n[5]*s} ${y+n[6]*s} `; }
+    return `${c}${x+n[0]*s} ${y+n[1]*s} `;
+  });
+}
+const SS = 760/1840, FW=480*SS, FH=700*SS, SX=CX-760/2, SY=CY-FH/2;
+const flames = [0,1,2].map(i=>flamePath(SX+i*680*SS, SY, SS));
+function circle(cx,cy,r){ return `M${cx-r} ${cy} A${r} ${r} 0 1 0 ${cx+r} ${cy} A${r} ${r} 0 1 0 ${cx-r} ${cy} Z`; }
+function rrect(x,y,w,h,r){ return `M${x+r} ${y} L${x+w-r} ${y} A${r} ${r} 0 0 1 ${x+w} ${y+r} L${x+w} ${y+h-r} A${r} ${r} 0 0 1 ${x+w-r} ${y+h} L${x+r} ${y+h} A${r} ${r} 0 0 1 ${x} ${y+h-r} L${x} ${y+r} A${r} ${r} 0 0 1 ${x+r} ${y} Z`; }
+const BW=880, BH=300, BX=CX-BW/2, BY=CY-BH/2, BR=80;
+const block = rrect(BX,BY,BW,BH,BR);
+const drop = circle(CX,CY,150);
+const O={maxSegmentLength:6};
+const B3 = flames.map(f=>flubber.interpolate(drop, f, O));
+const T3 = flames.map(f=>flubber.interpolate(f, block, O));
+const birth = x => B3.map(fn=>fn(x)).join(' ');
+const toBlock = x => T3.map(fn=>fn(x)).join(' ');
+const fromBlock = x => T3.map(fn=>fn(1-x)).join(' ');
+// --- loghi
+const LS=0.118;
+const LOG=[['3blaze_logo_horizontal','#FDF6E2'],['3blaze_academy','#000000'],['3blaze_net','#FDF6E2'],['luisa','#FDF6E2']];
+const lg=$('logos');
+LOG.forEach(([k,c],i)=>{
+  const L=D.logos[k], [vx,vy,vw,vh]=L.vb; const sc= k==='3blaze_academy'?LS*0.92:LS;
+  // allinea la base delle fiamme (y=0..700) al centro del blocco
+  const tx=CX - (vx+vw/2)*sc, ty=CY - 350*sc;
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.id='L'+i; g.setAttribute('opacity','0');
+  g.innerHTML=`<g transform="translate(${tx} ${ty}) scale(${sc})"><path fill="${c}" d="${L.d}"/></g>`; lg.appendChild(g);
+});
+{ const L=D.logos['3blaze_claim'], [vx,vy,vw,vh]=L.vb; const sc=300/vw; const tx=CX-(vx+vw/2)*sc, ty=BY+BH+90;
+  $('claim').innerHTML=`<g transform="translate(${tx} ${ty}) scale(${sc})"><path fill="#FDF6E2" d="${L.d}"/></g>`; $('claim').setAttribute('opacity','0'); }
+// --- easing
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const io=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;      // ease in-out cubic
+const out=x=>1-Math.pow(1-x,4);                        // ease out quart
+const apple=x=>{ // simile a cubic-bezier(.25,.1,.25,1) ma più morbida in uscita
+  return 1-Math.pow(1-io(x),1.6); };
+const spring=x=>{ if(x<=0)return 0; if(x>=1)return 1; return 1-Math.exp(-6*x)*Math.cos(9*x)*(1-x)+0*x; };
+const mix=(a,b,x)=>a+(b-a)*x;
+function hex(c){return [1,3,5].map(i=>parseInt(c.slice(i,i+2),16));}
+function lerpC(a,b,x){const A=hex(a),B=hex(b);return 'rgb('+A.map((v,i)=>Math.round(mix(v,B[i],x))).join(',')+')';}
+
+window.renderAt = function(t){
+  // ---------- forma del vetro
+  let shape='', glassOp=1, gscale=1;
+  if(t<0.8){ shape=''; }
+  else if(t<2.2){ const x=spring(seg(t,0.8,2.2)); shape=circle(CX,CY,Math.max(1,150*x)); glassOp=cl(seg(t,0.8,1.2)); }
+  else if(t<3.8){ shape=birth(apple(seg(t,2.2,3.8))); }
+  else if(t<6.2){ shape=flames.join(' '); }
+  else if(t<7.8){ shape=toBlock(apple(seg(t,6.2,7.8))); }
+  else if(t<17.4){ shape=block; }
+  else if(t<19.2){ shape=fromBlock(apple(seg(t,17.4,19.2))); }
+  else { shape=flames.join(' '); }
+  // leggero respiro sulle fiamme ferme
+  if((t>=3.8&&t<6.2)||t>=19.2){ gscale=1+0.012*Math.sin((t-3.8)*1.6); }
+  const gt=`translate(${CX} ${CY}) scale(${gscale}) translate(${-CX} ${-CY})`;
+  $('gp').setAttribute('d',shape||'M0 0'); $('gp').setAttribute('transform',gt);
+  // intensità "liquida": massima a metà delle trasformazioni
+  const bell=(a,b)=>{const x=seg(t,a,b); return (x>0&&x<1)?Math.sin(x*Math.PI):0;};
+  const k=Math.max(bell(0.8,2.4)*.6,bell(2.2,3.8),bell(6.2,7.8),bell(17.4,19.2));
+  $('gooBlur').setAttribute('stdDeviation', Math.max(0.01,k*16));
+  const A=mix(1,24,k), Bv=mix(0,-11,k);
+  $('gooM').setAttribute('values',`1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${A} ${Bv}`);
+  // ---------- fondo: trama entra, colori di divisione, trama esce
+  let tr=0; if(t>=4.0&&t<20.6){ tr = io(seg(t,4.0,6.0)) * (1-io(seg(t,19.2,20.8))); }
+  const z=mix(1.14,1.0,out(seg(t,4.0,12))) + 0.02*seg(t,12,22);
+  $('trama').setAttribute('opacity',tr);
+  $('trama').setAttribute('transform',`translate(${CX} ${CY}) scale(${z}) rotate(${mix(-2,1.5,seg(t,4,22))}) translate(${-CX} ${-CY})`);
+  // colori: 10.4 academy, 12.4 .net, 14.4 luisa, 16.2 ritorno
+  const cols=[['#FB4F31',10.2,12.2],['#006172',12.2,14.2],['#4D1821',14.2,16.2]];
+  let sop=0, scol='#FB4F31';
+  if(t>=10.2&&t<16.8){
+    sop = io(seg(t,10.2,10.8))*(1-io(seg(t,16.0,16.8)));
+    if(t<11.9) scol='#FB4F31'; else if(t<12.5) scol=lerpC('#FB4F31','#006172',io(seg(t,11.9,12.5)));
+    else if(t<13.9) scol='#006172'; else if(t<14.5) scol=lerpC('#006172','#4D1821',io(seg(t,13.9,14.5))); else scol='#4D1821';
+  }
+  $('solid').setAttribute('fill',scol); $('solid').setAttribute('opacity',sop);
+  // lente: ingrandimento del fondo dentro il vetro
+  const lz=1.16; $('lens').setAttribute('transform',`translate(${CX} ${CY}) scale(${lz}) translate(${-CX} ${-CY})`);
+  $('tint').setAttribute('opacity', mix(.22,.10,sop));
+  const shOp = cl(tr*0.75+sop*0.4); $('shadowG').setAttribute('opacity',shOp);
+  // rim più presente sul nero
+  $('rim').setAttribute('opacity', glassOp*0.9); $('bevG').setAttribute('opacity',glassOp); $('innerGlow').setAttribute('opacity',glassOp*0.5);
+  // ---------- loghi
+  const L=[0,0,0,0], blur=[0,0,0,0];
+  // 3blaze entra 7.4-8.8, esce 10.1-10.7; rientra 15.9-16.6, esce 16.8-17.5
+  const fadeIn=(a,b)=>io(seg(t,a,b)), fadeOut=(a,b)=>1-io(seg(t,a,b));
+  L[0]= t<12 ? fadeIn(7.5,8.9)*fadeOut(10.2,10.8) : fadeIn(16.0,16.7)*fadeOut(16.9,17.5);
+  L[1]= fadeIn(10.4,11.0)*fadeOut(11.9,12.4);
+  L[2]= fadeIn(12.4,13.0)*fadeOut(13.9,14.4);
+  L[3]= fadeIn(14.4,15.0)*fadeOut(15.9,16.4);
+  L.forEach((v,i)=>{ const g=$('L'+i); g.setAttribute('opacity',v); const b=(1-v)*14;
+    const dy=(1-v)*10; g.style.filter = b>0.3?`blur(${b}px)`:'none'; g.setAttribute('transform',`translate(0 ${dy}) translate(${CX} ${CY}) scale(${mix(1.04,1,v)}) translate(${-CX} ${-CY})`); });
+  // claim
+  const c=fadeIn(8.9,9.6)*fadeOut(10.0,10.5); $('claim').setAttribute('opacity',c);
+  $('claim').style.filter = c<.98?`blur(${(1-c)*6}px)`:'none';
+  // riflesso che attraversa il vetro
+  let sw=-1; if(t>=7.9&&t<9.3) sw=seg(t,7.9,9.3); else if(t>=19.4&&t<20.8) sw=seg(t,19.4,20.8);
+  if(sw>=0){ $('sweep').setAttribute('opacity',Math.sin(sw*Math.PI)); $('sweep').setAttribute('x', mix(0,1500,io(sw))); } else $('sweep').setAttribute('opacity',0);
+  // dissolvenza finale
+  document.body.style.opacity = 1;
+};
+window.renderAt(0);
+</script>
+</body></html>
